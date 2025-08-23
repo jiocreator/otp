@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase SMS OTP</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5;}
+        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; }
+        h2 { margin-top: 0; }
+        .input-group { margin-bottom: 1.5rem; text-align: left; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        input { width: 100%; padding: 0.8rem; border-radius: 6px; border: 1px solid #dddfe2; font-size: 1rem; box-sizing: border-box; }
+        button { width: 100%; padding: 0.8rem; border: none; border-radius: 6px; background-color: #1877f2; color: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #166fe5; }
+        #otp-container { display: none; }
+        #message { margin-top: 1.5rem; font-weight: 600; min-height: 20px; }
+        .success { color: green; } .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>ফোন নম্বর ভেরিফাই করুন 📱</h2>
+        <div id="phone-auth-container">
+            <div class="input-group">
+                <label for="phone-number">ফোন নম্বর (দেশের কোড সহ)</label>
+                <input type="tel" id="phone-number" placeholder="+8801700000000">
+            </div>
+            <button id="send-otp-btn">OTP পাঠান</button>
+            <div id="recaptcha-container" style="margin-top: 1rem;"></div>
+        </div>
+        <div id="otp-container">
+            <div class="input-group">
+                <label for="otp-input">৬ সংখ্যার OTP কোড</label>
+                <input type="number" id="otp-input" placeholder="******">
+            </div>
+            <button id="verify-otp-btn">ভেরিফাই করুন 🔑</button>
+        </div>
+        <p id="message"></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVBFqQjTXDbI7WkkV51tK5reLS-oE5Cww",
+            authDomain: "my-test-project-e266c.firebaseapp.com",
+            projectId: "my-test-project-e266c",
+            storageBucket: "my-test-project-e266c.firebasestorage.app",
+            messagingSenderId: "794200774195",
+            appId: "1:794200774195:web:2f381cb143041b03eef546",
+            measurementId: "G-7F15B5805N"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        const phoneContainer = document.getElementById('phone-auth-container');
+        const otpContainer = document.getElementById('otp-container');
+        const phoneNumberInput = document.getElementById('phone-number');
+        const sendOtpBtn = document.getElementById('send-otp-btn');
+        const otpInput = document.getElementById('otp-input');
+        const verifyOtpBtn = document.getElementById('verify-otp-btn');
+        const message = document.getElementById('message');
+
+        function setupRecaptcha() {
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                'size': 'invisible',
+                'callback': (response) => { console.log("reCAPTCHA verified"); }
+            });
+        }
+        setupRecaptcha();
+
+        sendOtpBtn.addEventListener('click', () => {
+            const phoneNumber = phoneNumberInput.value;
+            const appVerifier = window.recaptchaVerifier;
+            message.textContent = "";
+
+            if (!phoneNumber.startsWith('+')) {
+                message.textContent = 'নম্বরটি অবশ্যই + (দেশের কোড) দিয়ে শুরু হতে হবে।';
+                message.className = 'error';
+                return;
+            }
+
+            signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+                .then((confirmationResult) => {
+                    window.confirmationResult = confirmationResult;
+                    message.textContent = 'আপনার নম্বরে OTP পাঠানো হয়েছে।';
+                    message.className = 'success';
+                    phoneContainer.style.display = 'none';
+                    otpContainer.style.display = 'block';
+                }).catch((error) => {
+                    console.error("SMS পাঠানোর সমস্যা:", error);
+                    message.textContent = 'OTP পাঠাতে সমস্যা হয়েছে। কনসোল দেখুন।';
+                    message.className = 'error';
+                    window.recaptchaVerifier.render().then((widgetId) => {
+                        grecaptcha.reset(widgetId);
+                    });
+                });
+        });
+
+        verifyOtpBtn.addEventListener('click', () => {
+            const code = otpInput.value;
+            if (!code || code.length !== 6) {
+                message.textContent = 'সঠিক ৬ সংখ্যার OTP দিন।';
+                message.className = 'error';
+                return;
+            }
+            window.confirmationResult.confirm(code).then((result) => {
+                message.textContent = '✅ ভেরিফিকেশন সফল হয়েছে!';
+                message.className = 'success';
+                otpContainer.innerHTML = '<h2>স্বাগতম!</h2>';
+            }).catch((error) => {
+                message.textContent = 'ভুল OTP দিয়েছেন। আবার চেষ্টা করুন।';
+                message.className = 'error';
+            });
+        });
+    </script>
+</body>
+</html>
