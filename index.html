@@ -3,26 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flowplayer M3U Custom Subtitle Demo</title>
+    <title>Live Flowplayer Demo on GitHub Pages</title>
 
     <link rel="stylesheet" href="https://releases.flowplayer.org/6.0.5/skin/minimalist.css">
     
-    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 20px;
+        }
+        .flowplayer video::cue {
+            font-family: 'Hind Siliguri', sans-serif !important;
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.75);
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Flowplayer কাস্টম ফন্ট সাবটাইটেল ডেমো</h1>
+    <h1>Flowplayer কাস্টম ফন্ট সাবটাইটেল (GitHub Live Demo)</h1>
 
-    <div class="flowplayer" data-ratio="0.5625">
+    <div id="player-container" class="flowplayer" data-ratio="0.5625">
        <video>
           <source type="application/x-mpegurl" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
-          
-          <track label="বাংলা" kind="subtitles" srclang="bn" src="subtitles.vtt" default>
        </video>
     </div>
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://releases.flowplayer.org/6.0.5/flowplayer.min.js"></script>
 
+    <script>
+        const vttContent = `WEBVTT
+
+00:00:02.500 --> 00:00:06.000
+এই ডেমোটি GitHub Pages-এ লাইভ চলছে।
+
+00:00:07.000 --> 00:00:11.500
+সাবটাইটেল জাভাস্ক্রিপ্ট দিয়ে লোড হচ্ছে।
+
+00:00:13.000 --> 00:00:16.000
+এখন যে কেউ এটি দেখতে পারবে।`;
+
+        const blob = new Blob([vttContent], { type: 'text/vtt' });
+        const vttUrl = URL.createObjectURL(blob);
+        const videoElement = document.querySelector('#player-container video');
+        const trackElement = document.createElement('track');
+        trackElement.label = "বাংলা";
+        trackElement.kind = "subtitles";
+        trackElement.srclang = "bn";
+        trackElement.src = vttUrl;
+        trackElement.default = true;
+        videoElement.appendChild(trackElement);
+    </script>
 </body>
 </html>
