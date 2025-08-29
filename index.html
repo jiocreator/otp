@@ -39,8 +39,9 @@
     <div id="player-container" class="flowplayer" data-ratio="0.5625">
         <video controls preload="auto">
             <source type="application/x-mpegurl" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
-            <!-- ফলব্যাক MP4 -->
             <source type="video/mp4" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.mp4">
+            <!-- সাবটাইটেল ট্র্যাক -->
+            <track kind="subtitles" srclang="bn" label="বাংলা" src="subtitles.vtt" default>
         </video>
     </div>
 
@@ -50,25 +51,9 @@
     <script src="https://releases.flowplayer.org/hlsjs/flowplayer.hlsjs.min.js"></script>
 
     <script>
-        // VTT সাবটাইটেল ডায়নামিকভাবে লোড করা
-        const vttContent = `WEBVTT
-
-00:00:02.500 --> 00:00:06.000
-এই ডেমোটি GitHub Pages-এ লাইভ চলছে।
-
-00:00:07.000 --> 00:00:11.500
-সাবটাইটেল জাভাস্ক্রিপ্ট দিয়ে লোড হচ্ছে।
-
-00:00:13.000 --> 00:00:16.000
-এখন যে কেউ এটি দেখতে পারবে।`;
-
-        const blob = new Blob([vttContent], { type: 'text/vtt' });
-        const vttUrl = URL.createObjectURL(blob);
-
-        // Flowplayer V7 ইনিশিয়ালাইজ করা
         $(document).ready(function() {
             $("#player-container").flowplayer({
-                splash: true, // প্লেয়ার লোড হওয়ার আগে স্প্ল্যাশ স্ক্রিন
+                splash: true, // স্প্ল্যাশ স্ক্রিন
                 autoplay: false, // অটোপ্লে বন্ধ
                 ratio: 9/16, // ভিডিওর অনুপাত
                 clip: {
@@ -79,7 +64,7 @@
                     tracks: [
                         {
                             kind: "subtitles",
-                            src: vttUrl,
+                            src: "subtitles.vtt",
                             srclang: "bn",
                             label: "বাংলা",
                             default: true
