@@ -2,28 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Flowplayer GitHub Subtitle Demo</title>
+  <title>Flowplayer v7 GitHub Subtitle Demo</title>
 
-  <link rel="stylesheet" href="https://cdn.flowplayer.com/releases/native/3/stable/style/flowplayer.css">
-  <script src="https://cdn.flowplayer.com/releases/native/3/stable/flowplayer.min.js"></script>
+  <!-- Flowplayer v7 CSS & JS -->
+  <link rel="stylesheet" href="https://releases.flowplayer.org/7.2.7/skin/skin.css">
+  <script src="https://releases.flowplayer.org/7.2.7/flowplayer.min.js"></script>
 
   <style>
-    .flowplayer-subtitle {
-      font-family: "Poppins", Arial, sans-serif !important;
-      font-size: 22px !important;
-      font-weight: 600 !important;
-      color: #ffeb3b !important;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
-      background: rgba(0, 0, 0, 0.4);
-      padding: 6px 12px;
-      border-radius: 8px;
-    }
-
-    .flowplayer-subtitle-wrapper {
-      bottom: 80px !important;
-      text-align: center;
-    }
-
     body {
       background: #111;
       display: flex;
@@ -36,28 +21,43 @@
     #player {
       width: 85%;
       max-width: 900px;
-      border-radius: 16px;
+      border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+    }
+
+    /* Subtitle Styling for Classic Flowplayer */
+    .fp-caption {
+      font-family: "Poppins", Arial, sans-serif !important;
+      font-size: 20px !important;
+      font-weight: 600 !important;
+      color: #ffeb3b !important;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
+      background: rgba(0,0,0,0.4);
+      padding: 4px 10px;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
 
-  <div id="player"></div>
+  <div id="player" class="flowplayer">
+    <video>
+      <source type="application/x-mpegurl" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
+      <track kind="subtitles" srclang="bn" label="বাংলা" 
+             src="https://raw.githubusercontent.com/Piyash-ORG/demo-player/main/subb.vtt" default>
+    </video>
+  </div>
 
   <script>
-    const player = flowplayer("#player", {
-      src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", // ডেমো ভিডিও
-      captions: [
-        {
-          label: "বাংলা",
-          src: "https://raw.githubusercontent.com/Piyash-ORG/demo-player/main/subb.vtt", // GitHub raw link
-          srclang: "bn",
-          default: true
-        }
-      ]
+    flowplayer("#player", {
+      clip: {
+        sources: [
+          { type: "application/x-mpegurl", src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" }
+        ]
+      }
     });
   </script>
+
 </body>
 </html>
