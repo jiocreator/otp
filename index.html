@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flowplayer V7 Demo with Bangla Subtitles</title>
+    <title>Flowplayer V7 Demo with Noto Sans Bengali Subtitles</title>
 
     <!-- Flowplayer V7 CSS -->
     <link rel="stylesheet" href="https://releases.flowplayer.org/7.2.7/skin/skin.css">
 
+    <!-- Google Fonts: Noto Sans Bengali -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
         body {
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Noto Sans Bengali', sans-serif;
             text-align: center;
             background-color: #f0f0f0;
             margin: 20px;
@@ -20,8 +22,9 @@
             max-width: 800px;
             margin: 0 auto;
         }
+        /* সাবটাইটেলের জন্য কাস্টম ফন্ট স্টাইল */
         .flowplayer video::cue {
-            font-family: 'Hind Siliguri', sans-serif !important;
+            font-family: 'Noto Sans Bengali', sans-serif !important;
             font-size: 26px;
             font-weight: 700;
             color: #ffffff;
@@ -33,14 +36,13 @@
     </style>
 </head>
 <body>
-    <h1>Flowplayer V7 কাস্টম ফন্ট সাবটাইটেল (GitHub Live Demo)</h1>
+    <h1>Flowplayer V7 কাস্টম ফন্ট সাবটাইটেল (Noto Sans Bengali)</h1>
 
     <!-- Flowplayer কন্টেইনার -->
     <div id="player-container" class="flowplayer" data-ratio="0.5625">
         <video controls preload="auto">
             <source type="application/x-mpegurl" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
             <source type="video/mp4" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.mp4">
-            <!-- সাবটাইটেল ট্র্যাক -->
             <track kind="subtitles" srclang="bn" label="বাংলা" src="subtitles.vtt" default>
         </video>
     </div>
@@ -53,9 +55,9 @@
     <script>
         $(document).ready(function() {
             $("#player-container").flowplayer({
-                splash: true, // স্প্ল্যাশ স্ক্রিন
-                autoplay: false, // অটোপ্লে বন্ধ
-                ratio: 9/16, // ভিডিওর অনুপাত
+                splash: true,
+                autoplay: false,
+                ratio: 9/16,
                 clip: {
                     sources: [
                         { type: "application/x-mpegurl", src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
