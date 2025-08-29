@@ -1,0 +1,20 @@
+/* Google Fonts থেকে 'Hind Siliguri' ফন্ট ইম্পোর্ট করা হচ্ছে */
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+/* ভিডিওর সাবটাইটেল (cue) স্টাইল করা হচ্ছে */
+.flowplayer video::cue {
+  font-family: 'Hind Siliguri', sans-serif !important; /* আমাদের কাস্টম ফন্ট */
+  font-size: 26px;                                   /* ফন্টের সাইজ */
+  font-weight: 700;                                  /* ফন্ট বোল্ড করা */
+  color: #ffffff;                                    /* সাদা রঙ */
+  background-color: rgba(0, 0, 0, 0.75);             /* হালকা কালো ব্যাকগ্রাউন্ড */
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);       /* টেক্সটে শ্যাডো */
+  padding: 5px 10px;
+  border-radius: 5px;
+}
