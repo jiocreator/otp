@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Flowplayer Demo with Bangla Subtitles</title>
+    <title>Flowplayer V7 Demo with Bangla Subtitles</title>
 
-    <!-- Flowplayer CSS (সর্বশেষ সংস্করণ) -->
-    <link rel="stylesheet" href="https://cdn.flowplayer.com/releases/native/3/stable/style/flowplayer.css">
+    <!-- Flowplayer V7 CSS -->
+    <link rel="stylesheet" href="https://releases.flowplayer.org/7.2.7/skin/skin.css">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
@@ -33,20 +33,21 @@
     </style>
 </head>
 <body>
-    <h1>Flowplayer কাস্টম ফন্ট সাবটাইটেল (GitHub Live Demo)</h1>
+    <h1>Flowplayer V7 কাস্টম ফন্ট সাবটাইটেল (GitHub Live Demo)</h1>
 
     <!-- Flowplayer কন্টেইনার -->
     <div id="player-container" class="flowplayer" data-ratio="0.5625">
         <video controls preload="auto">
             <source type="application/x-mpegurl" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
-            <!-- ফলব্যাক MP4 যদি HLS সাপোর্ট না করে -->
+            <!-- ফলব্যাক MP4 -->
             <source type="video/mp4" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.mp4">
         </video>
     </div>
 
-    <!-- Flowplayer এবং hls.js স্ক্রিপ্ট -->
-    <script src="https://cdn.flowplayer.com/releases/native/3/stable/flowplayer.min.js"></script>
-    <script src="https://cdn.flowplayer.com/releases/native/3/stable/plugins/hls.min.js"></script>
+    <!-- Flowplayer V7 এবং HLS প্লাগিন -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://releases.flowplayer.org/7.2.7/flowplayer.min.js"></script>
+    <script src="https://releases.flowplayer.org/hlsjs/flowplayer.hlsjs.min.js"></script>
 
     <script>
         // VTT সাবটাইটেল ডায়নামিকভাবে লোড করা
@@ -64,28 +65,28 @@
         const blob = new Blob([vttContent], { type: 'text/vtt' });
         const vttUrl = URL.createObjectURL(blob);
 
-        // Flowplayer ইনিশিয়ালাইজ করা
-        flowplayer("#player-container", {
-            src: [
-                {
-                    type: "application/x-mpegurl",
-                    src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-                },
-                {
-                    type: "video/mp4",
-                    src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.mp4"
+        // Flowplayer V7 ইনিশিয়ালাইজ করা
+        $(document).ready(function() {
+            $("#player-container").flowplayer({
+                splash: true, // প্লেয়ার লোড হওয়ার আগে স্প্ল্যাশ স্ক্রিন
+                autoplay: false, // অটোপ্লে বন্ধ
+                ratio: 9/16, // ভিডিওর অনুপাত
+                clip: {
+                    sources: [
+                        { type: "application/x-mpegurl", src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
+                        { type: "video/mp4", src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.mp4" }
+                    ],
+                    tracks: [
+                        {
+                            kind: "subtitles",
+                            src: vttUrl,
+                            srclang: "bn",
+                            label: "বাংলা",
+                            default: true
+                        }
+                    ]
                 }
-            ],
-            tracks: [
-                {
-                    src: vttUrl,
-                    kind: "subtitles",
-                    srclang: "bn",
-                    label: "বাংলা",
-                    default: true
-                }
-            ],
-            token: false // ফ্রি সংস্করণের জন্য টোকেন প্রয়োজন নেই
+            });
         });
     </script>
 </body>
